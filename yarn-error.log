@@ -1,0 +1,45 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\roadmin\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add mongoose-unique-validator
+
+PATH: 
+  C:\Program Files\Python310\Scripts\;C:\Program Files\Python310\;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\PuTTY\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\HP\IdrsOCR_15.2.10.1114\;C:\Program Files (x86)\Common Files\Roxio Shared\DLLShared\;C:\Program Files (x86)\Common Files\Roxio Shared\10.0\DLLShared\;C:\Program Files\Java\jdk-12\bin;C:\Users\roadmin\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\roadmin\AppData\Local\Android\Sdk\emulator;C:\src\flutter\bin;C:\xampp\php;C:\Program Files\MongoDB\Server\5.0\bin;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\mongo\bin;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2022.1\bin;C:\Program Files\Maven\apache-maven-3.8.5\bin;C:\Users\roadmin\AppData\Roaming\Python\Python310\Scripts;C:\Users\roadmin\AppData\Local\Microsoft\WindowsApps;C:\Users\roadmin\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\roadmin\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\roadmin\AppData\Roaming\npm;C:\Users\roadmin\AppData\Local\GitHubDesktop\bin;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2022.1\bin;;C:\Users\roadmin\AppData\Local\Programs\Python\Python36-32\Scripts;
+
+Yarn version: 
+  1.22.11
+
+Node version: 
+  14.18.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'C:\Users\roadmin\Desktop\ExpressBE\backend\node_modules\bcrypt\lib\binding\napi-v3\bcrypt_lib.node'
+
+npm manifest: 
+  {
+    "name": "backend",
+    "version": "1.0.0",
+    "description": "fullstack web dev",
+    "main": "server.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "rs",
+    "license": "ISC",
+    "dependencies": {
+      "bcrypt": "^5.0.1",
+      "dotenv": "^16.0.3",
+      "express": "^4.18.1",
+      "jsonwebtoken": "^8.5.1",
+      "mongoose": "^6.6.4",
+      "mongoose-unique-validator": "^3.1.0",
+      "multer": "^1.4.5-lts.1"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
