@@ -10,7 +10,7 @@ const auth = require('../middleware/auth');
 const mailCtrl = require('../controllers/mail');
 
 
-router.post('/',auth, mailCtrl.sendEmail);
+router.post('/', mailCtrl.sendEmail);
 router.post('/messages',mailCtrl.getmail);
 //router.post('/many', auth, profCtrl.createprofMany);
  router.get('/received', auth, mailCtrl.getAllReceiveMailUser);
