@@ -102,9 +102,9 @@ exports.createInscription = async (req, res, next) => {
 exports.getAllInscription = async (req, res, next) => { 
   const url = req.headers.origin  
   const univ = await Universite.findOne({url:url})   
-  Inscription.find({universite:univ.id,annee:req.body.annee}).then(
+ 
+  Inscription.find({universite:univ.id,annee:req.params.id}).then(
     (inscriptions) => {      
-    
        res.status(201).json(inscriptions)
      })
   .catch(

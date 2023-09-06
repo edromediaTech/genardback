@@ -7,7 +7,7 @@ const inscriptionCtrl = require('../controllers/inscription');
 
 
 router.post('/',   inscriptionCtrl.createInscription);
-router.get('/all',   inscriptionCtrl.getAllInscription);
+router.get('/all/:id',   inscriptionCtrl.getAllInscription);
 router.get('/complete',   inscriptionCtrl.getAllInsComp);
 
 module.exports = router;
