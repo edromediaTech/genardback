@@ -46,7 +46,7 @@ exports.getAllFaculte = async (req, res, next) => {
     const url = req.headers.origin  
     const univ = await Universite.findOne({url:url})      
 
-  Faculte.find({universite:univ._id}).populate("etudiants").then(
+  Faculte.find({universite:univ._id}).populate("etudiants").populate("options").then(
     (facultes) => {
       res.status(200).json(facultes);
     }
