@@ -65,6 +65,7 @@ exports.createInscription = async (req, res, next) => {
   
  
 exports.updateInscription = (req, res, next) => {
+  
     const inscriptionObject = req.body;
     delete inscriptionObject._id;
     const inscription = new Inscription({
@@ -72,9 +73,10 @@ exports.updateInscription = (req, res, next) => {
       ...inscriptionObject ,
       
       });
-    inscription.updateOne({_id: req.params.id}, inscription).then(
+      
+    Inscription.updateOne({_id: req.params.id}, inscription).then(
       () => {
-        res.status(201).json({
+          res.status(201).json({
           message: 'inscription updated successfully!'
         });
       }
