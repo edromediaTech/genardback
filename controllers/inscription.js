@@ -78,17 +78,17 @@ exports.updateInscription = (req, res, next) => {
       () => {
           if(inscription.faculte !== inscription.lastFaculte){
             Faculte.findOne({ _id: inscriptionObject.lastFaculte }, (err, faculte) => {
-              console.log("last:"+inscriptionObject.lastFaculte)
+            
               if (faculte) {     
                    delete inscription.lastFaculte;                         
                   faculte.inscriptions.splice(faculte.inscriptions.indexOf(inscription),1);
-                  console.log("first")
+               
                   faculte.save();  
                   Faculte.findOne({ _id: inscriptionObject.faculte }, (err, faculte) => {
-                    console.log("current:"+inscriptionObject.faculte)
+                   
                     if (faculte) {
                         faculte.inscriptions.push(inscription);  
-                        console.log("second")            
+                                
                         faculte.save()  
                        
                     }
