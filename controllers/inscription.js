@@ -32,71 +32,60 @@ exports.createInscription = async (req, res, next) => {
 }
 
   
-//   exports.deleteEtudiant = (req, res, next) => {
-//     Etudiant.findOne({ _id: req.params.id})
-//         .then(etudiant => {
-//                 if (checkHaveChildren(etudiant)===false){
-//                      const fac_id = etudiant.faculte
-//                      const userId = etudiant.user
-//                     etudiant.deleteOne({_id: req.params.id})
-//                         .then(() => { 
-//                           Faculte.findOne({ _id: fac_id }, (err, faculte) => {
-//                             if (faculte) {                                
-//                                 faculte.etudiants.splice(faculte.etudiants.indexOf(etudiant),1);
-//                                 faculte.save();  
-//                                 // ============= update user
-
-//                                 User.findOne({_id: userId }, (err, user) => 
-//                                 {
-//                                 if (user) {
-//                                   user.checInsc = false;              
-//                                   user.save()   
-//                                 }
-//                               });
-
-//                             // ====================fin                              
-//                             }
-//                         });
-//                           res.status(200).json({message: 'Etudiant supprimé !'})
-//                         })
-//                         .catch(error => res.status(401).json({ error }));
-//                       }
-//                   else{
-//                     console.log('Suppression non autorisee !') 
-//                     res.status(203).json({message: 'Suppression non autorisee !'})
-//                   }
-//                 })       
+  exports.deleteInscription = (req, res, next) => {
+    Inscription.findOne({ _id: req.params.id})
+        .then(inscription => {
+                if (checkHaveChildren(inscription)===false){
+                     const fac_id = inscription.faculte
+                     const userId = inscription.user
+                    inscription.deleteOne({_id: req.params.id})
+                        .then(() => { 
+                          Faculte.findOne({ _id: fac_id }, (err, faculte) => {
+                            if (faculte) {                                
+                                faculte.inscriptions.splice(faculte.inscriptions.indexOf(inscription),1);
+                                faculte.save();  
+                                res.status(200).json({message: 'Inscription supprimée !'})                  
+                            }
+                        });
+                         
+                        })
+                        .catch(error => res.status(401).json({ error }));
+                      }
+                  else{
+                    console.log('Suppression non autorisee !') 
+                    res.status(203).json({message: 'Suppression non autorisee !'})
+                  }
+                })       
         
-//         .catch( error => {
-//           logger.error(error.message);
-//             res.status(500).json({ error });
-//         });
-//   };
+        .catch( error => {
+          logger.error(error.message);
+            res.status(500).json({ error });
+        });
+  };
   
  
-// exports.updateEtudiant = (req, res, next) => {
-//     constetudiantbject = req.body;
-//     delete etudiantObject._id;
-//     delete etudiantObject._etudiantId;
-//     const etudiant = new Etudiant({
-//       _id: req.params.id,
-//       ...etudiantObject ,
-//       universite_id:req.auth.universite_id  
-//       });
-//     Etudiant.updateOne({_id: req.params.id}, etudiant).then(
-//       () => {
-//         res.status(201).json({
-//           message: 'etudiant updated successfully!'
-//         });
-//       }
-//     ).catch(
-//       (error) => {
-//         res.status(400).json({
-//           error: error
-//         });
-//       }
-//     );
-//   };
+exports.updateInscription = (req, res, next) => {
+    const inscriptionObject = req.body;
+    delete inscriptionObject._id;
+    const inscription = new Inscription({
+      _id: req.params.id,
+      ...inscriptionObject ,
+      
+      });
+    inscription.updateOne({_id: req.params.id}, inscription).then(
+      () => {
+        res.status(201).json({
+          message: 'inscription updated successfully!'
+        });
+      }
+    ).catch(
+      (error) => {
+        res.status(400).json({
+          error: error
+        });
+      }
+    );
+  };
   
 
 exports.getAllInscription = async (req, res, next) => { 
