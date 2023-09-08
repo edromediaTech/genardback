@@ -10,13 +10,13 @@ const { info } = require("../utils/logger");
 const annee = require("../models/annee");
 
 exports.createInscription = async (req, res, next) => {
-  //  console("ok")
+ 
   const url = req.headers.origin  
   const univ = await Universite.findOne({url:url})      
   const inscriptionObject = req.body;
   delete inscriptionObject._id;
   delete inscriptionObject._userId;
-  console.log(inscriptionObject)
+ 
   const inscription = new Inscription({
       ...inscriptionObject, 
       universite:univ._id   
@@ -52,7 +52,7 @@ exports.createInscription = async (req, res, next) => {
                         .catch(error => res.status(401).json({ error }));
                       }
                   else{
-                    console.log('Suppression non autorisee !') 
+                   
                     res.status(203).json({message: 'Suppression non autorisee !'})
                   }
                 })       
@@ -76,11 +76,31 @@ exports.updateInscription = (req, res, next) => {
       
     Inscription.updateOne({_id: req.params.id}, inscription).then(
       () => {
+          if(inscription.faculte !== inscription.lastFaculte){
+            Faculte.findOne({ _id: inscriptionObject.lastFaculte }, (err, faculte) => {
+              console.log("last:"+inscriptionObject.lastFaculte)
+              if (faculte) {     
+                   delete inscription.lastFaculte;                         
+                  faculte.inscriptions.splice(faculte.inscriptions.indexOf(inscription),1);
+                  console.log("first")
+                  faculte.save();  
+                  Faculte.findOne({ _id: inscriptionObject.faculte }, (err, faculte) => {
+                    console.log("current:"+inscriptionObject.faculte)
+                    if (faculte) {
+                        faculte.inscriptions.push(inscription);  
+                        console.log("second")            
+                        faculte.save()  
+                       
+                    }
+                 });        
+              }
+          });
+          }
           res.status(201).json({
-          message: 'inscription updated successfully!'
-        });
-      }
-    ).catch(
+            message: 'inscription updated successfully!'})
+        })
+      
+    .catch(
       (error) => {
         res.status(400).json({
           error: error
