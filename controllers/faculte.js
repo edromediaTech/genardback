@@ -17,9 +17,7 @@ exports.createFaculte = async(req, res, next) => {
   delete faculteObject._userId;
   const faculte = new Faculte({
       ...faculteObject,
-      "universite" : univ._id
-
-      
+      "universite" : univ._id      
   });
 
   faculte.save()

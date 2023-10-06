@@ -13,7 +13,7 @@ const inscriptionSchema = mongoose.Schema({
   adresse: { type: String },
   naissance: { type: Date, required: true , trim: true },
   telephone: { type: String, trim: true },
-  email: { type: String, trim: true },
+  email: { type: String, trim: true, unique:true },
   annee: { type: String, trim: true },
   complete: { type: Boolean, default: false },
   photo:[{annee_id:{type: String},path:{type: String}}], 
@@ -25,10 +25,10 @@ const inscriptionSchema = mongoose.Schema({
   updated_at: {type: Date, default: Date.now }
 });
 
-inscriptionSchema.post('save', async function (doc,next) {
-    await Faculte.updateOne({ _id: doc.faculte }, { $push: { inscriptions: doc} })
-    return next();
-});
+// inscriptionSchema.post('save', async function (doc,next) {
+//     await Faculte.updateOne({ _id: doc.faculte }, { $push: { inscriptions: doc} })
+//     return next();
+// });
 inscriptionSchema.plugin(uniqueValidator);
 inscriptionSchema.index({ "nom": 1,"prenom":1,"naissance":1,"sexe":1,"email":1}, { unique: true });
 

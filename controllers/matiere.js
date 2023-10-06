@@ -9,8 +9,7 @@ const universite = require('../models/universite');
 
 //const {role} = require('../role');
 
-exports.createMatiere = async(req, res, next) => {
- 
+exports.createMatiere = async(req, res, next) => { 
   const matiereObject = req.body;
   delete matiereObject._id;
   delete matiereObject._userId;
@@ -20,8 +19,7 @@ exports.createMatiere = async(req, res, next) => {
 
   matiere.save()
   .then(() => { 
-    Faculte.findOne({ _id: matiereObject.faculte }, (err, faculte) => {
-          
+    Faculte.findOne({ _id: matiereObject.faculte }, (err, faculte) => {          
         if (faculte) {
             faculte.matieres.push(matiere);              
             faculte.save()          

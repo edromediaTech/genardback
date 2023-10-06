@@ -17,3 +17,13 @@ info: Sep-05-2023 14:09:14: 	Server Sent A file!
 info: Sep-08-2023 15:05:30: 	Server Sent A file!
 info: Sep-08-2023 15:05:35: 	Server Sent A file!
 info: Sep-08-2023 17:34:36: 	205 || Logout successful  
+info: Sep-23-2023 11:05:21: 	205 || Logout successful  
+info: Sep-25-2023 15:30:57: 	205 || Logout successful  
+info: Sep-27-2023 15:12:48: 	205 || Logout successful  
+info: Sep-27-2023 15:12:48: 	205 || Logout successful  
+info: Oct-05-2023 16:41:33: 	205 || Logout successful  
+info: Oct-05-2023 17:41:34: 	205 || Logout successful  
+info: Oct-05-2023 18:30:02: 	205 || Logout successful  
+error: Oct-05-2023 18:46:53: 	405 || CastError: Cast to ObjectId failed for value "" (type string) at path "option" for model "Inscription" 
+error: Oct-05-2023 18:50:37: 	405 || CastError: Cast to ObjectId failed for value "" (type string) at path "option" for model "Inscription" 
+error: Oct-05-2023 18:52:13: 	405 || CastError: Cast to ObjectId failed for value "" (type string) at path "option" for model "Inscription" 

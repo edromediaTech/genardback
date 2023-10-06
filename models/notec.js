@@ -14,10 +14,6 @@ const notecSchema = mongoose.Schema({
   updated_at: {type: Date, default: Date.now }
 });
 
-notecSchema.post('save', async function (doc,next) {
-    await Inscription.update({ _id: doc.inscription._id }, { $push: { notecs: doc._id } })
-    return next();
-});
 
 notecSchema.plugin(uniqueValidator);
 notecSchema.index({ "matierec":1,"annee":1,"inscription":1}, { unique: true });

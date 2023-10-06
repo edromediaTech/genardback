@@ -62,6 +62,8 @@ const optionRoutes = require('./routes/option');
 const actualiteRoutes = require('./routes/actualite');
 const commentRoutes = require('./routes/comment');
 const inscriptionRoutes = require('./routes/inscription');
+const notecRoutes = require('./routes/notec');
+const matierecRoutes = require('./routes/matierec');
 
 mongoose.set("strictQuery", false);
 //connexion a  la base de donnees
@@ -104,6 +106,8 @@ app.use('/api/option', optionRoutes);
 app.use('/api/actualite', actualiteRoutes);
 app.use('/api/comment', commentRoutes);
 app.use('/api/inscription', inscriptionRoutes);
+app.use('/api/notec', notecRoutes);
+app.use('/api/matierec', matierecRoutes);
 
 
 app.get('/',(req,res,next)=>{

@@ -22,10 +22,19 @@ exports.createInscription = async (req, res, next) => {
       universite:univ._id   
          
   });
-
+  
   inscription.save()
-  .then(() => {  
-    res.status(201).json(inscription)
+  .then(() => {
+    Faculte.findOne({ _id: inscriptionObject.faculte }, (err, faculte) => {
+     
+      if (faculte){
+          faculte.inscriptions.push(inscription);              
+          faculte.save()
+          res.status(201).json(inscription)          
+      }
+      
+  }) 
+    
   })
   .catch(error => { res.status(400).json( { error })})
  
@@ -114,7 +123,7 @@ exports.getAllInscription = async (req, res, next) => {
   const url = req.headers.origin  
   const univ = await Universite.findOne({url:url})   
  
-  Inscription.find({universite:univ.id,annee:req.params.id}).then(
+  Inscription.find({universite:univ.id,annee:req.params.id}).populate("notecs").then(
     (inscriptions) => {      
        res.status(201).json(inscriptions)
      })
@@ -146,3 +155,23 @@ exports.getAllInsComp = async (req, res, next) => {
         );  
 };
 
+exports.getOptionInscription = async (req, res, next) => { 
+  
+  const url = req.headers.origin  
+  const univ = await Universite.findOne({url:url})   
+  const option = req.params.id.split("|")[0]
+  const annee = req.params.id.split("|")[1]
+  
+  Inscription.find({option:option,annee:annee,complete:true}).populate("notecs").then(
+    (inscriptions) => {        
+       res.status(201).json(inscriptions)
+     })
+  .catch(
+          (error) => {
+            logger.error(`405 || ${error} `);           
+            res.status(405).json ({
+              error: error
+            });
+          }
+        );  
+};

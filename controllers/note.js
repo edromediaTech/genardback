@@ -30,9 +30,7 @@ exports.createNote = async(req, res, next) => {
   .catch(error => { res.status(400).json( { error })}) 
 }
 
-
-
- exports.deleteNote = (req, res, next) => {
+exports.deleteNote = (req, res, next) => {
     Note.findOne({ _id: req.params.id})
         .then(note => {
                 if (checkHaveChildren(note)===false){
