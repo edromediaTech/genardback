@@ -17,5 +17,5 @@ router.post('/messages',mailCtrl.getmail);
  router.get('/send', auth, mailCtrl.getAllSendMailUser);
 // router.patch('/:id', auth,secretaire, profCtrl.updateprof);
 //router.delete('/:id',  profCtrl.deleteProf);
-//router.get('/all', roleCtrl.getAllRole);
+router.get('/all/:id', mailCtrl.getAllMailUser);
 module.exports = router;

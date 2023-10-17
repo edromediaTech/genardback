@@ -105,6 +105,26 @@ exports.getAllReceiveMailUser = async (req, res, next) => {
   ); 
  };
 
+ exports.getAllMailUser = async (req, res, next) => { 
+
+  const email = req.params.id
+ 
+ // Mail.find({$or:{to:email, from:email}}).then(
+ Mail.find({$or: [{to:{$in:[email]}},{ from: email }]}).then(
+   (mails) => {
+    console.log(mails)
+     res.status(200).json(mails);
+   }
+ ).catch(
+   (error) => {
+     res.status(401).json({
+       error: error
+     });
+   }
+ ); 
+};
+
+
 exports.getAllSendMailUser = async (req, res, next) => { 
    const email = req.auth.email
   Mail.find({from:email}).then(
