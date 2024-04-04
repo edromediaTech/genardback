@@ -5,8 +5,7 @@ const axios = require('axios');
 
 const nodemailer = require('nodemailer');
 const mailgun = require("mailgun-js");
-//const api_key = "b080e42beb8ab9cdefb4a273aae0bab2-2cc48b29-45bb2c03" //upnch
-const api_key = "94ad3915760537975a72dced8edfa2bf-181449aa-6a0b5a9d" //upga
+
 //const DOMAIN = "https://api.mailgun.net/v3/upnch.univ.ht"
 const DOMAIN = "https://api.mailgun.net/v3/upga.univ.ht"
 
@@ -23,9 +22,7 @@ exports.sendEmail = async(req, res, next) => {
       //user: "postmaster@upga.univ.ht", 
       user: univ.mail.user, 
       pass: univ.mail.pass, 
-     // pass: "12494a38268c71b1462d08da6952e7b5-2cc48b29-3c6e95ef" //upnch
-     // pass: "b809dc92eab11dec73fdf77d6af8d00a-2cc48b29-d74c77fa" //upga
-     // pass: "5f017735ccd1635a52a12482acfb1567-5645b1f9-e8f1a4df" lemodele
+   
       }
       });   
    const mailData = {
