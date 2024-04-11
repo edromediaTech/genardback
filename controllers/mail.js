@@ -33,7 +33,7 @@ exports.sendEmail = async(req, res, next) => {
          attachments: [
             {
                 filename: "fichier.pdf",
-                path: "C:\Users\COL\Downloads\Receipt.pdf"
+                path: "C:/Users/COL/Downloads/Receipt.pdf"
             },
          ]
         };
