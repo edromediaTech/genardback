@@ -30,6 +30,12 @@ exports.sendEmail = async(req, res, next) => {
           to: req.body.to,   // list of receivers
           subject: req.body.subject,        
           html: req.body.html,
+         attachments: [
+            {
+                filename: req.body.chemin,
+                path: req.body.nom
+            },
+         ]
         };
 
         transporter.sendMail(mailData, function (err, info) {
