@@ -1,14 +1,16 @@
 const Universite = require('../models/universite');
 const Mail = require('../models/mail');
 const axios = require('axios');
-
+const formData = require('form-data');
+const fs = require('fs'); // Importez le module fs
 
 const nodemailer = require('nodemailer');
-const mailgun = require("mailgun-js");
+//const mailgun = require("mailgun-js");
 
 //const DOMAIN = "https://api.mailgun.net/v3/upnch.univ.ht"
 const DOMAIN = "https://api.mailgun.net/v3/upga.univ.ht"
 
+// Configurez Mailgun avec vos clés d'API et votre domaine
 
       
 exports.sendEmail = async(req, res, next) => {
@@ -25,11 +27,15 @@ exports.sendEmail = async(req, res, next) => {
    
       }
       });   
+      const attachment = new formData();
+      attachment.append('attachment', fs.createReadStream("C:/Users/COL/Downloads/admLaval.pdf")); // Assurez-vous que le chemin d'accès est correct
+
    const mailData = {
         from: req.body.from,  // sender address
           to: req.body.to,   // list of receivers
           subject: req.body.subject,        
           html: req.body.html,
+         attachments: req.body.attachments
         };
 
         transporter.sendMail(mailData, function (err, info) {
@@ -137,6 +143,9 @@ exports.getAllSendMailUser = async (req, res, next) => {
   ); 
  };
 
+
+ 
+ 
 
     // An array of attachments
     // attachments: [
