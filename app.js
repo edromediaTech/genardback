@@ -11,12 +11,8 @@ require('dotenv').config()
 const app = express(); 
 //const con ='mongodb+srv://sironel:Phigando1@cluster0.4syq9jj.mongodb.net/?retryWrites=true&w=majority';
 const con = 'mongodb+srv://'+process.env.DB_USER+':'+process.env.DB_PASS+'@cluster0.4syq9jj.mongodb.net/univDB';
-
-//const con ='mongodb+srv://sironel:Phigando1@cluster0.4syq9jj.mongodb.net/univDB';
-//const con ='mongodb://localhost:27017/CEEdb?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false';
-//const con ='mongodb+srv://'+process.env.DB_USER+':'+process.env.DB_PASSWORD+'@cluster0.4syq9jj.mongodb.net/?retryWrites=true&w=majority';
 app.use(bodyParser.json())
-//app.use(bodyParser.urlencoded())
+
 app.use(bodyParser.urlencoded({extended:true}))
 const {role} = require('./role');
 
