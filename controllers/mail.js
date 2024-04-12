@@ -1,8 +1,7 @@
 const Universite = require('../models/universite');
 const Mail = require('../models/mail');
 const axios = require('axios');
-const formData = require('form-data');
-const fs = require('fs'); // Importez le module fs
+
 
 const nodemailer = require('nodemailer');
 //const mailgun = require("mailgun-js");
@@ -35,7 +34,6 @@ exports.sendEmail = async(req, res, next) => {
           to: req.body.to,   // list of receivers
           subject: req.body.subject,        
           html: req.body.html,
-         attachments: req.body.attachments
         };
 
         transporter.sendMail(mailData, function (err, info) {
