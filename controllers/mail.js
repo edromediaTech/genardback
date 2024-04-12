@@ -26,14 +26,15 @@ exports.sendEmail = async(req, res, next) => {
    
       }
       });   
-      const attachment = new formData();
-      attachment.append('attachment', fs.createReadStream("C:/Users/COL/Downloads/admLaval.pdf")); // Assurez-vous que le chemin d'accès est correct
+      //const attachment = new formData();
+      //attachment.append('attachment', fs.createReadStream("C:/Users/COL/Downloads/admLaval.pdf")); // Assurez-vous que le chemin d'accès est correct
 
    const mailData = {
         from: req.body.from,  // sender address
           to: req.body.to,   // list of receivers
           subject: req.body.subject,        
           html: req.body.html,
+          attachments: req.body.attachments,
         };
 
         transporter.sendMail(mailData, function (err, info) {
