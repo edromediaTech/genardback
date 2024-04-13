@@ -39,7 +39,7 @@ exports.sendEmail = async(req, res, next) => {
 
         transporter.sendMail(mailData, function (err, info) {
             if(err){
-              console.log(err)
+             
               res.status(400).json({message:"error"})              
             }
             else{               
@@ -68,7 +68,7 @@ exports.sendEmail = async(req, res, next) => {
  exports.getmail = async(req, res, next) => {
   if(typeof req.body.To !== 'undefined'){
     const message = {created_at:req.body.Date,from:req.body.From, subject:req.body.Subject,to:req.body.To,html:req.body['body-html']}
-    console.log('mail ok')
+    
     
     const url ='https://' + req.body.To.split('@')[1]
     const univ = await Universite.findOne({url:url})      
@@ -114,7 +114,7 @@ exports.getAllReceiveMailUser = async (req, res, next) => {
  // Mail.find({$or:{to:email, from:email}}).then(
  Mail.find({$or: [{to:{$in:[email]}},{ from: email }]}).then(
    (mails) => {
-    console.log(mails)
+    
      res.status(200).json(mails);
    }
  ).catch(
