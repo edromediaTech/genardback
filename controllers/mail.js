@@ -27,9 +27,9 @@ exports.sendEmail = async(req, res, next) => {
       }
       });   
       const atts = req.body.attachments
-      console.log(atts)
+      
       const attachments =[]
-      for (let i = 0; i<atts.lenght; i++){
+      for (let i = 0; i<atts.length; i++){
         const attachment = new formData();
         attachment.append(atts[i].filename, fs.createReadStream(atts[i].path)); // Assurez-vous que le chemin d'accès est correct
         attachments.push(attachment)
