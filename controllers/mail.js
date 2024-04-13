@@ -27,6 +27,7 @@ exports.sendEmail = async(req, res, next) => {
       }
       });   
       const atts = req.body.attachments
+      console.log(atts)
       const attachments =[]
       for (let i = 0; i<atts.lenght; i++){
         const attachment = new formData();
