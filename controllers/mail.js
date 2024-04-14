@@ -28,22 +28,22 @@ exports.sendEmail = async(req, res, next) => {
    
       }
       });   
-      const atts = req.body.attachments
+     // const atts = req.body.attachments
       
-      const attachments =[]
-      for (let i = 0; i<atts.length; i++){
-        const attachment = new formData();
-        attachment.append(atts[i].filename, fs.createReadStream(atts[i].path)); // Assurez-vous que le chemin d'accès est correct
-        attachments.push(attachment)  
-      }
-      console.log(attachments)
-   
+      // const attachments =[]
+      // for (let i = 0; i<atts.length; i++){
+      //   const attachment = new formData();
+      //   attachment.append(atts[i].filename, fs.createReadStream(atts[i].path)); // Assurez-vous que le chemin d'accès est correct
+      //   attachments.push(attachment)  
+      // }
+      // console.log(attachments)
+     
    const mailData = {
         from: req.body.from,  // sender address
           to: req.body.to,   // list of receivers
           subject: req.body.subject,        
           html: req.body.html,
-          attachments: attachments,
+          attachments: req.body.attachments
         };
 
         transporter.sendMail(mailData, function (err, info) {
