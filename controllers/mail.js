@@ -36,6 +36,7 @@ exports.sendEmail = async(req, res, next) => {
         attachment.append(atts[i].filename, fs.createReadStream(atts[i].path)); // Assurez-vous que le chemin d'accès est correct
         attachments.push(attachment)  
       }
+      console.log(attachments)
    
    const mailData = {
         from: req.body.from,  // sender address
