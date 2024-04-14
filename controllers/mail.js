@@ -1,6 +1,8 @@
 const Universite = require('../models/universite');
 const Mail = require('../models/mail');
 const axios = require('axios');
+const fs = require('fs');
+const formData = require('form-data');
 
 
 const nodemailer = require('nodemailer');
@@ -32,9 +34,9 @@ exports.sendEmail = async(req, res, next) => {
       for (let i = 0; i<atts.length; i++){
         const attachment = new formData();
         attachment.append(atts[i].filename, fs.createReadStream(atts[i].path)); // Assurez-vous que le chemin d'accès est correct
-        attachments.push(attachment)
+        attachments.push(attachment)  
       }
-      
+   
    const mailData = {
         from: req.body.from,  // sender address
           to: req.body.to,   // list of receivers
