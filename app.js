@@ -36,6 +36,7 @@ app.use(session({
     resave: false 
 }));
 app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/journals', express.static(path.join(__dirname, 'journals')));
 app.use('/devoirs', express.static(path.join(__dirname, 'devoirs')));
 app.use('/actualites', express.static(path.join(__dirname, 'actualites')));
 app.use('/pj', express.static(path.join(__dirname, 'pj')));
@@ -65,6 +66,7 @@ const notecRoutes = require('./routes/notec');
 const matierecRoutes = require('./routes/matierec');
 const sendmailRoutes = require('./routes/sendmail');
 const pjRoutes = require('./routes/piecejointe');
+const journalRoutes = require('./routes/journal');
 
 mongoose.set("strictQuery", false);
 //connexion a  la base de donnees
@@ -111,6 +113,7 @@ app.use('/api/notec', notecRoutes);
 app.use('/api/matierec', matierecRoutes);
 app.use('/api/sendmail', sendmailRoutes);
 app.use('/api/pj', pjRoutes);
+app.use('/api/journal', journalRoutes);
 
 
 app.get('/',(req,res,next)=>{

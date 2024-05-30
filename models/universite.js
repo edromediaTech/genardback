@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 const Contact = require('../models/contact');
+const Journal = require('../models/journal');
 const User = require('../models/user');
 const Annee = require('../models/annee');
 const Inscription = require('../models/inscription');
@@ -30,6 +31,7 @@ const universiteSchema = mongoose.Schema({
         actualites:[{type:mongoose.Schema.Types.ObjectId,ref:"Actualite"}],        
         contacts:[{type:mongoose.Schema.Types.ObjectId,ref:"Contact"}],        
         facultes:[{type:mongoose.Schema.Types.ObjectId,ref:"Faculte"}],        
+        journals:[{type:mongoose.Schema.Types.ObjectId,ref:"Journal"}],        
         mails:[{type:mongoose.Schema.Types.ObjectId,ref:"Mail"}],        
         profs:[{type:mongoose.Schema.Types.ObjectId,ref:"Prof"}],  
         administrations:[{type:mongoose.Schema.Types.ObjectId,ref:"Administration"}],      
