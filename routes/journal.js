@@ -58,8 +58,8 @@ router.post('/upload/', upload.single('imgfile'),(req, res) => {
 
     //let extArray = req.file.mimetype.split("/");
     //let extension = extArray[extArray.length - 1];
-    
-    res.status(200).json({path: `${req.protocol}://${req.get('host')}/journals/${req.file.filename}`
+    const protocol = req.secure ? 'https' : 'http';
+    res.status(200).json({path: `${protocol}://${req.get('host')}/journals/${req.file.filename}`
     ,filename:req.file.filename,originalname:req.file.originalname})
     // res.status(200).json(img)
 });
