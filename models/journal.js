@@ -8,6 +8,7 @@ const journalSchema = mongoose.Schema({
   slug: {type: String, required: true},
   image: {type: String},      
   dokiman: {type: String},         
+  heyzine: {type: String},         
   universite:{type:mongoose.Schema.Types.ObjectId, ref:"Universite"},  
   created_at: {type: Date, default: Date.now },
   updated_at: {type: Date, default: Date.now }
