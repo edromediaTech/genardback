@@ -5,6 +5,7 @@ const auth = require('../middleware/auth');
 //const multer = require('../middleware/multer-actu');
 const journalCtrl = require('../controllers/journal');
 const fs = require('fs')
+const { resolve } = require('path');
 const multer = require("multer")
 
 const MIME_TYPES = {
@@ -52,6 +53,17 @@ router.post('/', auth, journalCtrl.createJournal);
 router.patch('/:id', auth,  journalCtrl.updateJournal);
 router.delete('/:id',auth, journalCtrl.deleteJournal);
 
+router.get('/download/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const filepath = '/journals/'+ filename;
+
+  fs.access(filepath, fs.constants.F_OK, (err) => {
+    if (err) {
+      return res.status(404).send('Fichier introuvable');
+    }
+    res.sendFile(filepath);
+  });
+});
 
 router.post('/upload/', upload.single('imgfile'),(req, res) => {
     //const img = fs.readFileSync(req.file.path)

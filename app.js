@@ -4,6 +4,8 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 const bodyParser = require('body-parser')
 
+// const { resolve } = require('path');
+const fs = require('fs');
 
 const logger = require('./utils/logger');
 const mongoose = require('mongoose');
@@ -40,6 +42,8 @@ app.use('/journals', express.static(path.join(__dirname, 'journals')));
 app.use('/devoirs', express.static(path.join(__dirname, 'devoirs')));
 app.use('/actualites', express.static(path.join(__dirname, 'actualites')));
 app.use('/pj', express.static(path.join(__dirname, 'pj')));
+
+
 
 
 //Recuperation des routes
