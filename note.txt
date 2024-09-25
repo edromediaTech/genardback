@@ -1,4 +1,0 @@
-reindexer le parent de la zone de l'arbre apres chaque suppression
-resoudre le probleme des champs uniques
-stockage de l'ecole id dans une variable globale au moment du lancement
-Creation de module backup avec creation de collection backup et list backup a chaque ecole.

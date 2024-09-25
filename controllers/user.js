@@ -1,185 +1,185 @@
 const User = require('../models/user');
-const Annee = require('../models/annee');
-const Universite = require('../models/universite');
 const jwt = require('jsonwebtoken');
 const logger = require('../utils/logger');
-const bcrypt = require('bcrypt');
-const { find } = require('../models/user');
+const bcrypt = require('bcryptjs');
 
-exports.signup = async (req, res, next) => {
+function generateUniqueCode(users) {
+  let uniqueCode;
+  let isUnique = false;
 
-  const url = req.headers.origin  
-  const univ = await Universite.findOne({url:url})
-  
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-      const user = new User({
-        name: req.body.name,
-        universite:univ._id,
-        user_level:req.body.user_level,
-        checkInsc:false,
-        email: req.body.email,
-        password: hash
-      });
-      user.save()
-        .then(() => {
-        Universite.findOne({ _id: univ._id }, (err, universite) => {
-          
-          if (universite) {
-              universite.users.push(user);              
-              universite.save()              
-          }          
-      }) 
-      res.status(201).json(user)       
-      
-    })
-      
-        .catch(error => res.status(400).json({ error }));
-    })
-    .catch(error => res.status(500).json({ error }));
-};
+  // Boucle jusqu'à ce qu'un code unique soit généré
+  while (!isUnique) {
+      // Générer un nouveau code au format ###-##
+      const firstPart = Math.floor(100 + Math.random() * 900);  // Génère un nombre à 3 chiffres
+      const secondPart = Math.floor(10 + Math.random() * 90);   // Génère un nombre à 2 chiffres
+      uniqueCode = `${firstPart}-${secondPart}`;                // Combine les deux parties
 
-exports.login = async (req, res, next) => {  
+      // Vérifier si ce code existe déjà dans le tableau des utilisateurs
+      isUnique = !users.some(user => user.code === uniqueCode);
+  }
+
+  return uniqueCode;  // Retourne le code unique
+}
 
 
-  const url =   req.headers.origin
-  const universite = await Universite.findOne({url:url})
-  
-  Annee.find().then(
-    (annee) => {
-      
-         var pg_year = 0
-         var lastyear = ''
-        for(y of annee){
-            var an =parseInt(y.nom.split('-')[1])
-            if(pg_year < an){
-               pg_year = an
-               lastyear = y.nom
-            }
+// Inscription (sign up) : Génération d'un code unique
+exports.signUp = async (req, res) => {
+    try {
+        // recuperer les users 
+        const users = await User.find()
+        // Générer un code unique
+        const randomCode = generateUniqueCode(users)
+
+        // Vérifier si l'email existe déjà
+        const existingUser = await User.findOne({ email: req.body.email });
+        if (existingUser) {
+            return res.status(400).json({ error: "Cet email est déjà utilisé." });
         }
 
-      //  ------------------------ fin calcul derniere annee
-  
-  User.findOne({ email: req.body.email,universite:universite._id })      
-      .then(user => {
-          if (!user) {
-              return res.status(401).json({ message: 'Paire login/mot de passe incorrecte'});
-          }                  
-          bcrypt.compare(req.body.password, user.password)
-              .then(valid => {
-                  if (!valid) {
-                      return res.status(401).json({ message: 'Paire login/mot de passe incorrecte' });
-                  }
-                  res.cookie('universite_id', user.universite_id)
+        // Hashage du mot de passe
+        const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
-                  // verify if the user is student or prof  
-
-                  res.status(200).json({
-                    userId: user._id,
-                    name:user.name,
-                    email:user.email,
-                    user_level: user.user_level,
-                    universite:user.universite,
-                    checkInsc:user.checInsc,
-                    anac:lastyear,
-                    token: jwt.sign(
-                        { userId: user._id, userLevel: user.user_level, universite:user.universite,annee:lastyear },
-                        'RANDOM_TOKEN_SECRET',
-                        { expiresIn: '24h' }
-                    )
-                  });
-              })
-              .catch(error => res.status(500).json({ error }));
-      })
-      .catch(error => res.status(500).json({ error }));
-
-    }
-    ).catch(
-      (error) => {
-        res.status(400).json({
-          error: error
+        // Créer un nouvel utilisateur
+        const newUser = new User({
+            name: req.body.name,
+            email: req.body.email,
+            password: hashedPassword,
+            code: randomCode, // Assigner le code unique
+            user_level: req.body.user_level || 0,
+            checInsc: req.body.checInsc || false
         });
+
+        await newUser.save();
+        res.status(201).json({ message: "Utilisateur créé avec succès.", user: newUser });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// Connexion (login) : Connexion via code uniquement
+exports.login = async (req, res) => {
+    const { code } = req.body;
+
+    try {
+        // Vérifier si le code est valide
+        const user = await User.findOne({ code });
+        if (!user) {
+            return res.status(400).json({ error: "Code invalide." });
+        }
+
+        // Générer un token JWT pour authentification
+        const token = jwt.sign(
+            { userId: user._id, email: user.email, userLevel: user.user_level },
+            process.env.JWT_SECRET, 
+            { expiresIn: '24h' }
+        );
+
+        res.status(200).json({ message: "Connexion réussie.", token, user });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// Obtenir les détails d'un utilisateur
+exports.getUser = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ message: "Utilisateur non trouvé." });
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// Mise à jour d'un utilisateur
+exports.updateUser = async (req, res) => {
+    try {
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.status(200).json(updatedUser);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// Suppression d'un utilisateur
+exports.deleteUser = async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: "Utilisateur supprimé." });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// update user code
+
+exports.updateUserCode = async (req, res) => {
+  try {
+      // Récupérer tous les utilisateurs existants
+      const allUsers = await User.find();
+
+      // Générer un nouveau code unique en passant le tableau des utilisateurs
+      const newCode = generateUniqueCode(allUsers);
+
+      // Mettre à jour le code de l'utilisateur
+      const updatedUser = await User.findByIdAndUpdate(req.params.id, { code: newCode }, { new: true });
+
+      // Si l'utilisateur n'est pas trouvé
+      if (!updatedUser) {
+          return res.status(404).json({ error: "Utilisateur non trouvé." });
       }
-    );
+
+      res.status(200).json({ message: "Code mis à jour avec succès.", user: updatedUser });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
 };
 
-exports.updateUser = (req, res, next) => {
-  const userObject = req.body;
-  delete userObject._id;
-  delete userObject._userId;
-  const user = new User({
-    _id: req.params.id,
-    ...userObject ,
-    universite_id:req.auth.universite_id  
-    });
-  User.updateOne({_id: req.params.id}, user).then(
-    () => {
-      res.status(201).json({
-        message: 'user updated successfully!'
-      });
-    }
-  ).catch(
-    (error) => {
-      res.status(400).json({
-        error: error
-      });
-    }
-  );
-};
-
-
-exports.deleteUser = (req, res, next) => {
+ //  /api/auth/logout
+ exports.logout = (req, res, next) => {
   
-  User.findOne({ _id: req.params.id})
-      .then(user => {
-                  
-                  const universite_id = user.universite_id
-                  
-                  User.deleteOne({_id: req.params.id})
-                      .then(() => { 
-                        Universite.findOne({ _id: universite_id }, (err, universite) => {
-                          if (universite) {
-                              
-                              universite.users.splice(universite.users.indexOf(req.params.id),1);
-                              universite.save();
-                              res.status(200).json({message: 'Objet supprimé !'})
-                              
-                          }
-                      })
-                    })
-                      .catch(error => res.status(401).json({ error }));
-              })       
-      
-      .catch( error => {
-          res.status(500).json({ error });
-      });
+  if (req.session) {
+    req.session.destroy(err => {
+      if (err) {
+        logger.error(`405 || ${err} `);
+        res.status(400).json({message:'Unable to log out'})
+      } else {
+        logger.info(`205 || Logout successful  `);
+        res.json({message:'Logout successful'})
+      }
+    });
+  } else {
+    res.end()
+  }
 };
 
-exports.getOneUser = (req, res, next) => {
-  User.findOne({
-    _id: req.params.id
-  }).then(
-    (user) => {
-      res.status(200).json(user);
+// update user level
+exports.updateUserLevel = async (req, res) => {
+ 
+  const { _id, userLevel } = req.body;
+ 
+  try {
+    const user = await User.findByIdAndUpdate(_id, { userLevel: userLevel }, { new: true });
+    
+    if (!user) {
+      return res.status(404).send('User not found');
     }
-  ).catch(
-    (error) => {
-      res.status(404).json({
-        error: error
-      });
-    }
-  );
+    
+    res.status(201).send(user);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
 };
 
-exports.getAllUser = async (req, res, next) => {
-  const url =   req.headers.origin
-  const univ = await Universite.findOne({url:url})
+exports.getAllUser = async (req, res, next) => { 
 
-  User.find({universite:univ._id,email: { $nin: ["sironel2002@gmail.com","d@gmail.com"] },
+  User.find({email: { $nin: ["sironel2002@gmail.com","d@gmail.com"] },
   _id:{ $nin: [req.auth.userId] } 
 }).then(
     (users) => {
-       res.status(200).json(users);
+       res.status(201).json(users);
     }
   ).catch(
     (error) => {
@@ -189,21 +189,3 @@ exports.getAllUser = async (req, res, next) => {
     }
   );
 };
-
-// //  /api/auth/logout
- exports.logout = (req, res, next) => {
-
-    if (req.session) {
-      req.session.destroy(err => {
-        if (err) {
-          logger.error(`405 || ${err} `);
-          res.status(400).json({message:'Unable to log out'})
-        } else {
-          logger.info(`205 || Logout successful  `);
-          res.json({message:'Logout successful'})
-        }
-      });
-    } else {
-      res.end()
-    }
-  };

@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 require('dotenv').config()
 const app = express(); 
 //const con ='mongodb+srv://sironel:Phigando1@cluster0.4syq9jj.mongodb.net/?retryWrites=true&w=majority';
-const con = 'mongodb+srv://'+process.env.DB_USER+':'+process.env.DB_PASS+'@cluster0.4syq9jj.mongodb.net/univDB';
+const con = process.env.CON;
 app.use(bodyParser.json())
 
 app.use(bodyParser.urlencoded({extended:true}))
@@ -23,7 +23,7 @@ const path = require('path');
 
 
 app.use(cors({
-  origin: ['http://localhost:3000','https://upnch.univ.ht','https://upga.univ.ht'],
+  origin: ['http://localhost:3000'],
   methods: '*',
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -38,8 +38,6 @@ app.use(session({
     resave: false 
 }));
 app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use('/journals', express.static(path.join(__dirname, 'journals')));
-app.use('/devoirs', express.static(path.join(__dirname, 'devoirs')));
 app.use('/actualites', express.static(path.join(__dirname, 'actualites')));
 app.use('/pj', express.static(path.join(__dirname, 'pj')));
 
@@ -49,28 +47,14 @@ app.use('/pj', express.static(path.join(__dirname, 'pj')));
 //Recuperation des routes
 
 const userRoutes = require('./routes/user');
-const anneeRoutes = require('./routes/annee');
-const contactRoutes = require('./routes/contact');
-const universiteRoutes = require('./routes/universite');
-const faculteRoutes = require('./routes/faculte');
-const etudiantRoutes = require('./routes/etudiant');
-const profRoutes = require('./routes/prof');
-const roleRoutes = require('./routes/role');
-const mailRoutes = require('./routes/mail');
-const matiereRoutes = require('./routes/matiere');
-const courRoutes = require('./routes/cour');
-const noteRoutes = require('./routes/note');
-const devoirRoutes = require('./routes/devoir');
-const ressourceRoutes = require('./routes/ressource');
-const optionRoutes = require('./routes/option');
-const actualiteRoutes = require('./routes/actualite');
-const commentRoutes = require('./routes/comment');
-const inscriptionRoutes = require('./routes/inscription');
-const notecRoutes = require('./routes/notec');
-const matierecRoutes = require('./routes/matierec');
-const sendmailRoutes = require('./routes/sendmail');
-const pjRoutes = require('./routes/piecejointe');
-const journalRoutes = require('./routes/journal');
+const projetRoutes = require('./routes/projet');
+const transactionRoutes = require('./routes/transaction');
+const documentRoutes = require('./routes/document');
+const investissementRoutes = require('./routes/investissement');
+const investisseurRoutes = require('./routes/investisseur');
+const rendementRoutes = require('./routes/rendement');
+
+
 
 mongoose.set("strictQuery", false);
 //connexion a  la base de donnees
@@ -95,29 +79,12 @@ app.use((req, res, next) => {
 //base des routes
 
 app.use('/api/auth', userRoutes);
-app.use('/api/annee', anneeRoutes);
-app.use('/api/faculte', faculteRoutes);
-
-app.use('/api/contact', contactRoutes);
-app.use('/api/universite', universiteRoutes);
-app.use('/api/etudiant', etudiantRoutes);
-app.use('/api/prof', profRoutes);
-app.use('/api/role', roleRoutes);
-app.use('/api/mail', mailRoutes);
-app.use('/api/matiere', matiereRoutes);
-app.use('/api/cour', courRoutes);
-app.use('/api/note', noteRoutes);
-app.use('/api/devoir', devoirRoutes);
-app.use('/api/ressource', ressourceRoutes);
-app.use('/api/option', optionRoutes);
-app.use('/api/actualite', actualiteRoutes);
-app.use('/api/comment', commentRoutes);
-app.use('/api/inscription', inscriptionRoutes);
-app.use('/api/notec', notecRoutes);
-app.use('/api/matierec', matierecRoutes);
-app.use('/api/sendmail', sendmailRoutes);
-app.use('/api/pj', pjRoutes);
-app.use('/api/journal', journalRoutes);
+app.use('/api/projet', projetRoutes);
+app.use('/api/investissement', investissementRoutes);
+app.use('/api/investisseur', investisseurRoutes);
+app.use('/api/rendement', rendementRoutes);
+app.use('/api/transaction', transactionRoutes);
+app.use('/api/document', documentRoutes);
 
 
 app.get('/',(req,res,next)=>{
