@@ -8,7 +8,7 @@ const investisseurSchema = new mongoose.Schema({
     soldeCompte: { type: Number, default: 0 },
     dateInscription: { type: Date, default: Date.now },
     typeInvestisseur: { type: String, enum: ['particulier', 'institutionnel'], default: 'particulier' },
-    historiqueTransactions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Transaction' }]
+    transactions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Transaction' }]
 });
 
 // Middleware pre-save

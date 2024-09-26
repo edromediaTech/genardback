@@ -10,7 +10,7 @@ const projetSchema = new mongoose.Schema({
     tauxRendement: Number,
     risque: { type: String, enum: ['faible', 'modéré', 'élevé'], default: 'modéré' },
     statut: { type: String, enum: ['ouvert', 'fermé', 'financé'], default: 'ouvert' },
-    investisseurs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Investisseur' }]
+    investissements: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Investissement' }]
 });
 
 // Middleware pre-save
