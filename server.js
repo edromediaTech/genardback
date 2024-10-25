@@ -40,7 +40,7 @@ const { Server } = require('socket.io');
 
 const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:3000'], // Remplace "*" par l'URL spécifique de ton frontend, par exemple : "http://localhost:8080"
+    origin: ['http://localhost:3000','https://mbe-1qbt.onrender.com'], // Remplace "*" par l'URL spécifique de ton frontend, par exemple : "http://localhost:8080"
     methods: ["GET", "POST"], // Méthodes HTTP autorisées
     allowedHeaders: ['Content-Type', 'Authorization'], // Les en-têtes que tu veux autoriser
     credentials: true // Si tu utilises des cookies ou des sessions, définis-le sur true
