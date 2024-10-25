@@ -6,7 +6,10 @@ const transactionSchema = new mongoose.Schema({
     montant: { type: Number, required: true },
     dateTransaction: { type: Date, default: Date.now },
     statut: { type: String, enum: ['en attente', 'confirmée', 'échouée'], default: 'en attente' },
-    moyenPaiement: String
+    moyenPaiement: String,
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now }
+  
 });
 
 // Middleware pre-save

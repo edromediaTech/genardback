@@ -1,14 +1,13 @@
 const mongoose = require('mongoose');
 
-const investisseurSchema = new mongoose.Schema({  
-    telephone: String,
-    adresse: String,
+const investisseurSchema = new mongoose.Schema({     
     user:{ type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    investissements: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Investissement' }],
-    soldeCompte: { type: Number, default: 0 },
-    dateInscription: { type: Date, default: Date.now },
+    investissements: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Investissement' }],       
     typeInvestisseur: { type: String, enum: ['particulier', 'institutionnel'], default: 'particulier' },
-    transactions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Transaction' }]
+    transactions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Transaction' }],
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now }
+  
 });
 
 // Middleware pre-save

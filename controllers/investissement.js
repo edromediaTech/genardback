@@ -40,3 +40,27 @@ exports.getInvestissement = async (req, res) => {
         res.status(404).json({ error: error.message });
     }
 };
+
+exports.getInvestissements = async (req, res) => {
+    try {
+      // Cherche tous les documents dans la collection 'Investisseur'
+      const investissements = await Investissement.find()
+      .populate({
+        path: 'investisseur',
+        populate: { path: 'user' } // Peupler le champ 'user' dans 'investisseur'
+      })
+      .populate('projet');
+      
+      // Vérifie si des investissements sont trouvés
+      if (!investissements.length) {
+        return res.status(404).json({ message: 'Aucun investisseur trouvé.' });
+      }
+      
+      // Retourne la liste des investissements
+      res.status(200).json(investissements);
+    } catch (error) {
+      // Gestion des erreurs
+      console.error(error);
+      res.status(500).json({ message: 'Erreur serveur lors de la récupération des investissements.' });
+    }
+  };

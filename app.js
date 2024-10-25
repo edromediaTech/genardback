@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+//const { io } = require('./server'); // Importer l'instance de io
+
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 const bodyParser = require('body-parser')
@@ -46,7 +48,7 @@ app.use('/pj', express.static(path.join(__dirname, 'pj')));
 
 //Recuperation des routes
 
-const userRoutes = require('./routes/user');
+//const userRoutes = require('./routes/user')(io);
 const projetRoutes = require('./routes/projet');
 const transactionRoutes = require('./routes/transaction');
 const documentRoutes = require('./routes/document');
@@ -78,7 +80,7 @@ app.use((req, res, next) => {
 
 //base des routes
 
-app.use('/api/auth', userRoutes);
+//app.use('/api/auth', userRoutes);
 app.use('/api/projet', projetRoutes);
 app.use('/api/investissement', investissementRoutes);
 app.use('/api/investisseur', investisseurRoutes);

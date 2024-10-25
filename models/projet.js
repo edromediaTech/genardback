@@ -3,14 +3,16 @@ const mongoose = require('mongoose');
 const projetSchema = new mongoose.Schema({
     nomProjet: { type: String, required: true },
     description: String,
-    montantNecessaire: { type: Number, required: true },
-    montantCollecte: { type: Number, default: 0 },
+    montantNecessaire: { type: Number, required: true },   
     dateDebut: Date,
     dateFin: Date,
-    tauxRendement: Number,
+    tauxRendement: {type:Number, default:0},
     risque: { type: String, enum: ['faible', 'modéré', 'élevé'], default: 'modéré' },
     statut: { type: String, enum: ['ouvert', 'fermé', 'financé'], default: 'ouvert' },
-    investissements: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Investissement' }]
+    investissements: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Investissement' }],
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now }
+  
 });
 
 // Middleware pre-save

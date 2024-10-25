@@ -1,7 +1,10 @@
 const User = require('../models/user');
+const Investisseur = require('../models/investisseur');
+
 const jwt = require('jsonwebtoken');
 const logger = require('../utils/logger');
 const bcrypt = require('bcryptjs');
+const {role} = require('../role')
 
 function generateUniqueCode(users) {
   let uniqueCode;
@@ -24,26 +27,25 @@ function generateUniqueCode(users) {
 
 // Inscription (sign up) : Génération d'un code unique
 exports.signUp = async (req, res) => {
+ 
     try {
         // recuperer les users 
-        const users = await User.find()
+        const users = await User.find()       
         // Générer un code unique
         const randomCode = generateUniqueCode(users)
-
+       
         // Vérifier si l'email existe déjà
-        const existingUser = await User.findOne({ email: req.body.email });
+        const existingUser = await User.findOne({ email: req.body.tel });
         if (existingUser) {
             return res.status(400).json({ error: "Cet email est déjà utilisé." });
         }
 
         // Hashage du mot de passe
-        const hashedPassword = await bcrypt.hash(req.body.password, 12);
+       // const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
         // Créer un nouvel utilisateur
         const newUser = new User({
-            name: req.body.name,
-            email: req.body.email,
-            password: hashedPassword,
+            ... req.body,           
             code: randomCode, // Assigner le code unique
             user_level: req.body.user_level || 0,
             checInsc: req.body.checInsc || false
@@ -57,7 +59,7 @@ exports.signUp = async (req, res) => {
 };
 
 // Connexion (login) : Connexion via code uniquement
-exports.login = async (req, res) => {
+exports.login = async (req, res, io) => {
     const { code } = req.body;
 
     try {
@@ -66,15 +68,25 @@ exports.login = async (req, res) => {
         if (!user) {
             return res.status(400).json({ error: "Code invalide." });
         }
-
+      
+         // Émettre un événement lorsqu'un nouveau membre est inscrit
+        io.emit('login', user); // Envoyer l'objet du membre à tous les clients connectés
+    
         // Générer un token JWT pour authentification
         const token = jwt.sign(
             { userId: user._id, email: user.email, userLevel: user.user_level },
             process.env.JWT_SECRET, 
             { expiresIn: '24h' }
         );
-
-        res.status(200).json({ message: "Connexion réussie.", token, user });
+        
+        res.status(200).json(
+          { message: "Connexion réussie.",
+            token, 
+            prenom:user.prenom, 
+            nom:user.nom, 
+            user_level: user.user_level,
+            relation:user.relation
+          });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -158,10 +170,10 @@ exports.updateUserCode = async (req, res) => {
 // update user level
 exports.updateUserLevel = async (req, res) => {
  
-  const { _id, userLevel } = req.body;
+  const { _id, user_level } = req.body;
  
   try {
-    const user = await User.findByIdAndUpdate(_id, { userLevel: userLevel }, { new: true });
+    const user = await User.findByIdAndUpdate(_id, { user_level: user_level }, { new: true });
     
     if (!user) {
       return res.status(404).send('User not found');
@@ -175,8 +187,8 @@ exports.updateUserLevel = async (req, res) => {
 
 exports.getAllUser = async (req, res, next) => { 
 
-  User.find({email: { $nin: ["sironel2002@gmail.com","d@gmail.com"] },
-  _id:{ $nin: [req.auth.userId] } 
+  User.find({email: { $nin: ["sironel2002@gmail.com","d@gmail.com"] }
+
 }).then(
     (users) => {
        res.status(201).json(users);
@@ -189,3 +201,25 @@ exports.getAllUser = async (req, res, next) => {
     }
   );
 };
+
+exports.getAllUserInv = async (req, res, next) => { 
+ 
+  try {
+    // Find all users with the user_level 'investisseur'
+    const usersWithRole = await User.find({ user_level: role.investisseur });
+
+    // Get the IDs of users who are already in the Investisseur model
+    const linkedInvestisseurs = await Investisseur.find().select('user');
+    const linkedUserIds = linkedInvestisseurs.map((inv) => inv.user.toString());
+
+    // Filter users who are not in the Investisseur model
+    const unlinkedUsers = usersWithRole.filter((user) => !linkedUserIds.includes(user._id.toString()));
+
+    return res.status(201).json(unlinkedUsers);
+  } catch (error) {
+    console.error('Error fetching unlinked investisseurs:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+

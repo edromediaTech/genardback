@@ -5,62 +5,59 @@ const investissementSchema = new mongoose.Schema({
     projet: { type: mongoose.Schema.Types.ObjectId, ref: 'Projet', required: true },
     montantInvesti: { type: Number, required: true },
     dateInvestissement: { type: Date, default: Date.now },
-    dateEcheance: Date,
-    tauxRendement: Number,
+    dateEcheance: {type:Date, default:new Date('2034-01-01')},
+    tauxRendement: {type:Number, default:0},
     statut: { type: String, enum: ['en cours', 'terminé', 'annulé'], default: 'en cours' },
-    retourSurInvestissement: Number,
-    rendements: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rendement' }]
+    retourSurInvestissement: {type:Number, default:0},
+    rendements: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rendement' }],
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now }
+  
 });
 
-// Middleware pre-save
+// Middleware pre-save : Ajouter l'investissement dans les collections Investisseur et Projet
 investissementSchema.pre('save', async function (next) {
-    
     try {
-        const investisseur = mongoose.model('Investisseur');
-        const projet = mongoose.model('Projet');
+        const Investisseur = mongoose.model('Investisseur');
+        const Projet = mongoose.model('Projet');
         
-        // Mise à jour de la catégorie pour ajouter le investissement
-        await investisseur.findByIdAndUpdate(
-          doc.investisseur, 
-          { $addToSet: { investissements: doc } }, // Ajoute le investissement dans le tableau 'investissements' sans doublons
-          { new: true, useFindAndModify: false } 
+        // Ajoute l'investissement au tableau 'investissements' de l'investisseur et du projet
+        await Investisseur.findByIdAndUpdate(
+            this.investisseur, 
+            { $addToSet: { investissements: this._id } }, // Ajoute l'investissement sans doublons
+            { new: true }
         );
-        await projet.findByIdAndUpdate(
-          doc.investissement, 
-          { $addToSet: { investissements: doc } }, // Ajoute le projet dans le tableau 'projets' sans doublons
-          { new: true, useFindAndModify: false } 
+        
+        await Projet.findByIdAndUpdate(
+            this.projet, 
+            { $addToSet: { investissements: this._id } }, // Ajoute l'investissement sans doublons
+            { new: true }
         );
+
         next();
-      } catch (error) {
+    } catch (error) {
         next(error);
-      }
-    
+    }
 });
 
-// Middleware pre-remove
-investissementSchema.pre('remove',async function (next) {
+// Middleware pre-remove : Supprimer l'investissement des collections Investisseur et Projet
+investissementSchema.pre('remove', async function (next) {
     try {
-        // Obtenir la investissement à supprimer
-        const investissement = await this.model.findOne(this.getFilter());
-    
-        if (!investissement) {
-          return next(new Error('investissement non trouvée.'));
-        }
-    
-        // Retirer la investissement du membre
-        await mongoose.model('Investisseur').findByIdAndUpdate(investissement.investisseur, {
-          $pull: { investissements: investissement._id }  // Supprime la investissement du tableau 'investissements'
-        });
-        await mongoose.model('Projet').findByIdAndUpdate(investissement.investisseur, {
-          $pull: { investissements: investissement._id }  // Supprime la investissement du tableau 'investissements'
-        });
-    
-        console.log(`La investissement avec l'ID ${investissement._id} a été retirée du membre.`);
-        next(); // Continue la suppression de la investissement
-      } catch (error) {
+        // Supprime l'investissement du tableau 'investissements' de l'investisseur et du projet
+        await mongoose.model('Investisseur').findByIdAndUpdate(
+            this.investisseur, 
+            { $pull: { investissements: this._id } } // Retire l'investissement du tableau
+        );
+        
+        await mongoose.model('Projet').findByIdAndUpdate(
+            this.projet, 
+            { $pull: { investissements: this._id } } // Retire l'investissement du tableau
+        );
+
+        next(); // Continue la suppression de l'investissement
+    } catch (error) {
         next(error); // Passe l'erreur à la prochaine étape
-      }
-    
+    }
 });
 
 module.exports = mongoose.model('Investissement', investissementSchema);

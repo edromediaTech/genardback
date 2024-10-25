@@ -4,7 +4,10 @@ const rendementSchema = new mongoose.Schema({
     investissement: { type: mongoose.Schema.Types.ObjectId, ref: 'Investissement', required: true },
     dateEvaluation: { type: Date, default: Date.now },
     tauxRendementActuel: Number,
-    montantRetour: Number
+    montantRetour: Number,
+    created_at: { type: Date, default: Date.now },
+    updated_at: { type: Date, default: Date.now }
+  
 });
 
 // Middleware pre-save

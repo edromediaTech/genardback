@@ -3,15 +3,25 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const userCtrl = require('../controllers/user');
 
-router.post('/signup', userCtrl.signUp);
-router.post('/login', userCtrl.login);
-router.get('/all', auth, userCtrl.getAllUser);
-router.get('/:id', auth, userCtrl.getUser);
-router.patch('/:id',auth, userCtrl.updateUser);
-router.patch('/code/:id',auth, userCtrl.updateUserCode);
-router.patch('/userlevel/:id',auth, userCtrl.updateUserLevel);
-router.delete('/logout', userCtrl.logout);
-router.delete('/:id',auth, userCtrl.deleteUser);
+module.exports = (io) => {
+  // Route pour la création de compte (signup)
+  router.post('/signup', userCtrl.signUp);
 
+  // Route pour la connexion (login) avec gestion de Socket.IO
+  router.post('/login', (req, res) => userCtrl.login(req, res, io));
 
-module.exports = router;
+  // Autres routes
+  router.get('/all', userCtrl.getAllUser);
+  router.get('/all1', userCtrl.getAllUserInv);
+  router.get('/:id', auth, userCtrl.getUser);
+
+  router.patch('/:id', auth, userCtrl.updateUser);
+  router.patch('/code/:id', auth, userCtrl.updateUserCode);
+  router.patch('/userlevel/:id', auth, userCtrl.updateUserLevel);
+
+  router.delete('/logout', userCtrl.logout);
+  router.delete('/:id', auth, userCtrl.deleteUser);
+
+  // Retourner le router après avoir défini toutes les routes
+  return router;
+};

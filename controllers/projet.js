@@ -40,3 +40,23 @@ exports.getProjet = async (req, res) => {
         res.status(404).json({ error: error.message });
     }
 };
+
+
+// Fonction pour retourner tous les projets
+exports.getAllProjets = async (req, res) => {
+    try {
+        // Récupérer tous les projets dans la base de données
+        const projets = await Projet.find();
+        
+        // Vérifier si des projets sont trouvés
+        if (projets.length === 0) {
+            return res.status(404).json({ message: 'Aucun projet trouvé.' });
+        }
+
+        // Retourner la liste des projets
+        res.status(200).json(projets);
+    } catch (error) {
+        // Gérer les erreurs
+        res.status(500).json({ message: 'Erreur lors de la récupération des projets.', error: error.message });
+    }
+};
