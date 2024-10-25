@@ -88,6 +88,7 @@ exports.login = async (req, res, io) => {
             relation:user.relation
           });
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error: error.message });
     }
 };
