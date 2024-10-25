@@ -25,7 +25,7 @@ const path = require('path');
 
 
 app.use(cors({
-  origin: ['http://localhost:3000'],
+  origin: ['http://localhost:3000','https://mbe-1qbt.onrender.com'],
   methods: '*',
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
