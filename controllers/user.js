@@ -80,11 +80,12 @@ exports.login = async (req, res, io) => {
         );
         
         res.status(200).json(
-          { message: "Connexion réussie.",
+          { message: "Connexion réussie.", 
             token, 
             prenom:user.prenom, 
             nom:user.nom, 
             user_level: user.user_level,
+            userId: user._id,
             relation:user.relation
           });
     } catch (error) {
