@@ -1,57 +1,59 @@
-// controllers/suggestionController.js
-const Suggestion = require('../models/suggestion');
+// suggestionController.js
+const Suggestion = require('../models/suggestion'); // Assurez-vous du chemin correct vers votre modèle
 
 // Créer une suggestion
 exports.createSuggestion = async (req, res) => {
-  try {
-    const { expediteur, destinataire, sujet, message, attachments } = req.body;
-    const suggestion = new Suggestion({
-      expediteur,
-      destinataire,
-      sujet,
-      message,
-      attachments,
-      trash: false,
-      lue: false
-    });
-    await suggestion.save();
-    res.status(201).json(suggestion);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
+    try {
+        const suggestion = new Suggestion(req.body);
+        const newSuggestion = await suggestion.save();
+        res.status(201).json(newSuggestion);
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la création de la suggestion", error });
+    }
 };
 
-// Récupérer les suggestions pour un utilisateur
-exports.getSuggestionsForUser = async (req, res) => {
-  try {
-    const  userId  = req.params.userId;
-    const suggestions = await Suggestion.find({ destinataire: userId })
-      .populate('expediteur', 'name') // Populate l'expéditeur avec son nom
-      .populate('destinataire', 'name');
-    res.status(200).json(suggestions);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
+// Lire toutes les suggestions
+exports.getAllSuggestions = async (req, res) => {
+    try {
+        const suggestions = await Suggestion.find().populate('expediteur');
+        res.status(200).json(suggestions);
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la récupération des suggestions", error });
+    }
 };
 
-// Marquer une suggestion comme lue
-exports.markAsRead = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const suggestion = await Suggestion.findByIdAndUpdate(id, { lue: true }, { new: true });
-    res.status(200).json(suggestion);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
+// Lire une suggestion par ID
+exports.getSuggestionById = async (req, res) => {
+    try {
+        const suggestion = await Suggestion.findById(req.params.id).populate('expediteur');
+        if (!suggestion) return res.status(404).json({ message: "Suggestion non trouvée" });
+        res.status(200).json(suggestion);
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la récupération de la suggestion", error });
+    }
 };
 
-// Supprimer une suggestion
+// Mettre à jour une suggestion par ID
+exports.updateSuggestion = async (req, res) => {
+    try {
+        const suggestion = await Suggestion.findByIdAndUpdate(req.params.id, req.body, {
+            new: true,
+            runValidators: true,
+        });
+        if (!suggestion) return res.status(404).json({ message: "Suggestion non trouvée" });
+        res.status(200).json(suggestion);
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la mise à jour de la suggestion", error });
+    }
+};
+
+// Supprimer une suggestion par ID
 exports.deleteSuggestion = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await Suggestion.findByIdAndDelete(id);
-    res.status(200).json({ message: 'Suggestion supprimée' });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
+    try {
+        const suggestion = await Suggestion.findByIdAndDelete(req.params.id);
+        if (!suggestion) return res.status(404).json({ message: "Suggestion non trouvée" });
+        res.status(200).json({ message: "Suggestion supprimée avec succès" });
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la suppression de la suggestion", error });
+    }
 };

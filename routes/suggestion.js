@@ -1,18 +1,21 @@
-// routes/suggestionRoutes.js
+// suggestionRoutes.js
 const express = require('express');
 const router = express.Router();
-const suggestionController = require('../controllers/suggestion');
+const suggestionController = require('../controllers/suggestion'); // Assurez-vous du chemin correct
 
-// Créer une suggestion
+// Route pour créer une suggestion
 router.post('/', suggestionController.createSuggestion);
 
-// Récupérer les suggestions pour un utilisateur
-router.get('/user/:userId', suggestionController.getSuggestionsForUser);
+// Route pour récupérer toutes les suggestions
+router.get('/', suggestionController.getAllSuggestions);
 
-// Marquer une suggestion comme lue
-router.put('/:id/markAsRead', suggestionController.markAsRead);
+// Route pour récupérer une suggestion par ID
+router.get('/:id', suggestionController.getSuggestionById);
 
-// Supprimer une suggestion
+// Route pour mettre à jour une suggestion par ID
+router.put('/:id', suggestionController.updateSuggestion);
+
+// Route pour supprimer une suggestion par ID
 router.delete('/:id', suggestionController.deleteSuggestion);
 
 module.exports = router;
