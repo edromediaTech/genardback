@@ -55,6 +55,7 @@ const documentRoutes = require('./routes/document');
 const investissementRoutes = require('./routes/investissement');
 const investisseurRoutes = require('./routes/investisseur');
 const rendementRoutes = require('./routes/rendement');
+const suggestionRoutes = require('./routes/suggestion');
 
 
 
@@ -87,7 +88,7 @@ app.use('/api/investisseur', investisseurRoutes);
 app.use('/api/rendement', rendementRoutes);
 app.use('/api/transaction', transactionRoutes);
 app.use('/api/document', documentRoutes);
-
+app.use('/api/suggestion', suggestionRoutes);
 
 app.get('/',(req,res,next)=>{
   //res.sendFile('html/welcome.html');
