@@ -1,14 +1,11 @@
 const role = {
     "utilisateur":0,
-    "employe":1,
-    "investisseur":2,
-    "responsable":3,
-    "gestionnaire":4,
-    "superviseur":5,
-    "mca":6, //membre conseil Adm
-    "comptable":7, //membre conseil Adm
-    "Intendant":8, //membre conseil Adm
-    "admin":9,
-    "supadmin":10 
+    "serveur":1,
+    "cuisinier":2,   
+    "barman":3,   
+    "gestionnaire":5,
+    "superviseur":6,
+    "admin":7,
+    "supadmin":8
  }
 module.exports ={role}; 

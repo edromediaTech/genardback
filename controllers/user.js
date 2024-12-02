@@ -1,5 +1,5 @@
 const User = require('../models/user');
-const Investisseur = require('../models/investisseur');
+
 
 const jwt = require('jsonwebtoken');
 const logger = require('../utils/logger');

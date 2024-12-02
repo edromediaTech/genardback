@@ -49,13 +49,6 @@ app.use('/pj', express.static(path.join(__dirname, 'pj')));
 //Recuperation des routes
 
 //const userRoutes = require('./routes/user')(io);
-const projetRoutes = require('./routes/projet');
-const transactionRoutes = require('./routes/transaction');
-const documentRoutes = require('./routes/document');
-const investissementRoutes = require('./routes/investissement');
-const investisseurRoutes = require('./routes/investisseur');
-const rendementRoutes = require('./routes/rendement');
-const suggestionRoutes = require('./routes/suggestion');
 
 
 
@@ -82,13 +75,7 @@ app.use((req, res, next) => {
 //base des routes
 
 //app.use('/api/auth', userRoutes);
-app.use('/api/projet', projetRoutes);
-app.use('/api/investissement', investissementRoutes);
-app.use('/api/investisseur', investisseurRoutes);
-app.use('/api/rendement', rendementRoutes);
-app.use('/api/transaction', transactionRoutes);
-app.use('/api/document', documentRoutes);
-app.use('/api/suggestion', suggestionRoutes);
+
 
 app.get('/',(req,res,next)=>{
   //res.sendFile('html/welcome.html');
