@@ -1,24 +1,26 @@
 const User = require('../models/user');
 
-
 const jwt = require('jsonwebtoken');
 const logger = require('../utils/logger');
 const bcrypt = require('bcryptjs');
 const {role} = require('../role')
 
 function generateUniqueCode(users) {
+  // Si users est null ou undefined, on le remplace par un tableau vide
+  users = users || [];
+
   let uniqueCode;
   let isUnique = false;
 
   // Boucle jusqu'à ce qu'un code unique soit généré
   while (!isUnique) {
-      // Générer un nouveau code au format ###-##
-      const firstPart = Math.floor(100 + Math.random() * 900);  // Génère un nombre à 3 chiffres
-      const secondPart = Math.floor(10 + Math.random() * 90);   // Génère un nombre à 2 chiffres
-      uniqueCode = `${firstPart}-${secondPart}`;                // Combine les deux parties
+    // Générer un nouveau code au format ###-##
+    const firstPart = Math.floor(100 + Math.random() * 900);  // Génère un nombre à 3 chiffres
+    const secondPart = Math.floor(10 + Math.random() * 90);   // Génère un nombre à 2 chiffres
+    uniqueCode = `${firstPart}-${secondPart}`;                // Combine les deux parties
 
-      // Vérifier si ce code existe déjà dans le tableau des utilisateurs
-      isUnique = !users.some(user => user.code === uniqueCode);
+    // Vérifier si ce code existe déjà dans le tableau des utilisateurs
+    isUnique = !users.some(user => user.code === uniqueCode);
   }
 
   return uniqueCode;  // Retourne le code unique
@@ -85,8 +87,7 @@ exports.login = async (req, res, io) => {
             prenom:user.prenom, 
             nom:user.nom, 
             user_level: user.user_level,
-            userId: user._id,
-            relation:user.relation
+            userId: user._id            
           });
     } catch (error) {
         console.log(error)

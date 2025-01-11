@@ -49,6 +49,11 @@ app.use('/pj', express.static(path.join(__dirname, 'pj')));
 //Recuperation des routes
 
 //const userRoutes = require('./routes/user')(io);
+const tableRoutes = require('./routes/table');
+const commandeRoutes = require('./routes/commande');
+const clientRoutes = require('./routes/client');
+const serveurRoutes = require('./routes/serveur');
+const produitRoutes = require('./routes/produit');
 
 
 
@@ -75,6 +80,11 @@ app.use((req, res, next) => {
 //base des routes
 
 //app.use('/api/auth', userRoutes);
+app.use('/api/tables', tableRoutes);
+app.use('/api/commandes', commandeRoutes);
+app.use('/api/clients', clientRoutes);
+app.use('/api/serveurs', serveurRoutes);
+app.use('/api/produits', produitRoutes);
 
 
 app.get('/',(req,res,next)=>{
