@@ -12,21 +12,40 @@ exports.createProduit = async (req, res) => {
 };
 
 
+
 exports.getProduitsBoissonEnAlerte = async (req, res) => {
   try {
-    // Récupérer les produits de catégorie 'Boisson' avec quantité <= alerte
+    // Récupérer les produits de catégorie 'Boisson' avec quantite <= alerte
     const produitsEnAlerte = await Produit.find({
-      categorie: 'Boisson',
-      quantite: { $lte: '$alerte' }
+      categorie: 'Boisson'
     });
 
+    // Filtrer les produits où la quantité est inférieure ou égale à l'alerte
+    const produitsEnAlerteFiltres = produitsEnAlerte.filter(produit => produit.quantite <= produit.alerte);
+
     // Retourner les produits trouvés
-    res.status(200).json(produitsEnAlerte);
+    res.status(200).json(produitsEnAlerteFiltres);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
+
+//exports.getProduitsBoissonEnAlerte = async (req, res) => {
+// try {
+  // Récupérer les produits de catégorie 'Boisson' avec quantité <= alerte
+ // const produitsEnAlerte = await Produit.find({
+  //  categorie: 'Boisson',
+   // quantite: { $lte: '$alerte' }
+  // });
+
+  // Retourner les produits trouvés
+ // res.status(200).json(produitsEnAlerte);
+// } catch (error) {
+ // console.error(error);
+ // res.status(500).json({ error: error.message });
+//}
+//};
 
 // Obtenir tous les produits
 exports.getProduits = async (req, res) => {

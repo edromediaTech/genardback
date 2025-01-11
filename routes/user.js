@@ -14,10 +14,11 @@ module.exports = (io) => {
   router.get('/all', userCtrl.getAllUser);
   router.get('/all1', userCtrl.getAllUserInv);
   router.get('/:id', auth, userCtrl.getUser);
-
+  
+  router.patch('/userlevel/:id', auth, userCtrl.updateUserLevel);
   router.patch('/:id', auth, userCtrl.updateUser);
   router.patch('/code/:id', auth, userCtrl.updateUserCode);
-  router.patch('/userlevel/:id', auth, userCtrl.updateUserLevel);
+
 
   router.delete('/logout', userCtrl.logout);
   router.delete('/:id', auth, userCtrl.deleteUser);
