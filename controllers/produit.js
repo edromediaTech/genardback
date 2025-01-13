@@ -89,3 +89,35 @@ exports.deleteProduit = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.updateQuantite = async (req, res) => {
+  try {
+    const { produitId, valeurAjoutee } = req.body;
+
+    // Validation des entrées
+    if (!produitId || valeurAjoutee === undefined) {
+      return res.status(400).json({ message: "Produit ID et valeur ajoutée sont requis." });
+    }
+
+    // Recherche et mise à jour
+    const produit = await Produit.findByIdAndUpdate(
+      produitId,
+      { $inc: { quantite: valeurAjoutee } }, // Incrémente la quantité
+      { new: true } // Retourne le document mis à jour
+    );
+
+    // Vérifier si le produit existe
+    if (!produit) {
+      return res.status(404).json({ message: "Produit non trouvé." });
+    }
+
+    // Réponse réussie
+    return res.status(200).json({
+      message: "Quantité mise à jour avec succès.",
+      produit,
+    });
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour de la quantité :", error);
+    return res.status(500).json({ message: "Erreur serveur.", error });
+  }
+};

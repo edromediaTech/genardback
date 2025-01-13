@@ -8,6 +8,8 @@ router.post('/', produitController.createProduit);
 // Obtenir tous les produits
 router.get('/', produitController.getProduits);
 
+router.put('/quantite', produitController.updateQuantite);
+
 router.get('/appro', produitController.getProduitsBoissonEnAlerte);
 
 // Obtenir un produit par ID
