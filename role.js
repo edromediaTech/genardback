@@ -3,9 +3,9 @@ const role = {
     "serveur":1,
     "cuisinier":2,   
     "barman":3,   
-    "gestionnaire":5,
-    "superviseur":6,
-    "admin":7,
-    "supadmin":8
+    "gestionnaire":4,
+    "superviseur":5,
+    "admin":6,
+    "supadmin":7
  }
 module.exports ={role}; 

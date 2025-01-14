@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../middleware/auth');
 const produitController = require('../controllers/produit');
 
 // Ajouter un produit
-router.post('/', produitController.createProduit);
+router.post('/',auth, produitController.createProduit);
 
 // Obtenir tous les produits
 router.get('/', produitController.getProduits);
 
-router.put('/quantite', produitController.updateQuantite);
+router.put('/quantite',auth, produitController.updateQuantite);
 
 router.get('/appro', produitController.getProduitsBoissonEnAlerte);
 
@@ -16,9 +17,9 @@ router.get('/appro', produitController.getProduitsBoissonEnAlerte);
 router.get('/:id', produitController.getProduitById);
 
 // Mettre à jour un produit
-router.put('/:id', produitController.updateProduit);
+router.put('/:id',auth, produitController.updateProduit);
 
 // Supprimer un produit
-router.delete('/:id', produitController.deleteProduit);
+router.delete('/:id', auth,produitController.deleteProduit);
 
 module.exports = router;

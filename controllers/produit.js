@@ -113,7 +113,6 @@ exports.updateQuantite = async (req, res) => {
 
     // Réponse réussie
     return res.status(200).json({
-      message: "Quantité mise à jour avec succès.",
       produit,
     });
   } catch (error) {

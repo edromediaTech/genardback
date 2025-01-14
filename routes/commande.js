@@ -4,7 +4,7 @@ const auth = require('../middleware/auth');
 const commandeController = require('../controllers/commande');
 
 // Ajouter une commande
-router.post('/',  commandeController.createCommande);
+router.post('/',auth,  commandeController.createCommande);
 router.get('/produits', commandeController.getProduitsParPeriode);
 
 // Obtenir toutes les commandes
@@ -16,10 +16,10 @@ router.get('/:id', commandeController.getCommandeById);
 router.get('/produits', commandeController.getProduitsParPeriode);
 
 // Mettre à jour une commande
-router.put('/:id', commandeController.updateCommande);
+router.put('/:id',auth, commandeController.updateCommande);
 
 router.post('/add',  commandeController.addToCommande);
 // Supprimer une commande
-router.delete('/:id', commandeController.deleteCommande);
+router.delete('/:id',auth, commandeController.deleteCommande);
 
 module.exports = router;

@@ -6,7 +6,7 @@ const CommandeSchema = new mongoose.Schema({
   date:{type:Date, default: Date.now},
   articles: [{
     produit: { type: mongoose.Schema.Types.ObjectId, ref: 'Produit', required: true },
-    quantite: { type: Number, required: true, default: 1 },
+    quantite: { type: Number, default: 1 },
   }],
   statut: { 
     type: String, 
@@ -18,6 +18,13 @@ const CommandeSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 CommandeSchema.methods.addOrUpdateArticle = async function (produitId, quantiteAjoutee) {
+  // Convertir quantiteAjoutee en nombre
+  quantiteAjoutee = Number(quantiteAjoutee);
+
+  if (isNaN(quantiteAjoutee)) {
+    throw new Error('La quantité ajoutée doit être un nombre valide.');
+  }
+
   const produit = await Produit.findById(produitId);
   if (!produit) throw new Error('Produit introuvable');
 
@@ -52,7 +59,6 @@ CommandeSchema.methods.addOrUpdateArticle = async function (produitId, quantiteA
   if (produit.categorie === 'Boisson') {
     await produit.save();
   }
-
 
   // Recalcule le total
   await this.populate('articles.produit'); // Peupler les articles pour accéder aux prix

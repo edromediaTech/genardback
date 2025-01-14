@@ -80,7 +80,7 @@ exports.login = async (req, res, io) => {
             process.env.JWT_SECRET, 
             { expiresIn: '24h' }
         );
-        
+      
         res.status(200).json(
           { message: "Connexion réussie.", 
             token, 
@@ -172,8 +172,10 @@ exports.updateUserCode = async (req, res) => {
 
 // update user level
 exports.updateUserLevel = async (req, res) => {
+  
  
   const { _id, user_level } = req.body;
+ 
  
   try {
     const user = await User.findByIdAndUpdate(_id, { user_level: user_level }, { new: true });

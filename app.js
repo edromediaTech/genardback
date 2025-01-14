@@ -54,6 +54,8 @@ const commandeRoutes = require('./routes/commande');
 const clientRoutes = require('./routes/client');
 const serveurRoutes = require('./routes/serveur');
 const produitRoutes = require('./routes/produit');
+const achatRoutes = require('./routes/achat');
+
 
 
 
@@ -85,6 +87,8 @@ app.use('/api/commandes', commandeRoutes);
 app.use('/api/clients', clientRoutes);
 app.use('/api/serveurs', serveurRoutes);
 app.use('/api/produits', produitRoutes);
+app.use('/api/achats', achatRoutes);
+
 
 
 app.get('/',(req,res,next)=>{
