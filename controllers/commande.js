@@ -43,11 +43,13 @@ exports.getCommandes = async (req, res) => {
   try {
     const commandes = await Commande.find()
       .populate({
-        path: 'articles.produit',
-        select: 'nom prix' // Inclut uniquement le nom et le prix des produits
+        path: 'articles.produit', // Chemin pour accéder au produit dans chaque article
+        model: 'Produit', // Assurez-vous que le modèle associé est bien défini
+        select: 'nom prix' // Sélectionne uniquement le nom et le prix des produits
       })
-      .populate('serveur', 'prenom email'); // Inclut uniquement le nom et l'email du serveur
+      .populate('serveur', 'prenom email'); // Inclut uniquement le prénom et l'email du serveur
 
+    console.log(commandes); // Vérifiez si les données sont correctement peuplées
     res.status(200).json(commandes);
   } catch (error) {
     console.error('Erreur lors de la récupération des commandes :', error);
@@ -55,7 +57,9 @@ exports.getCommandes = async (req, res) => {
   }
 };
 
+
 exports.getProduitsParPeriode = async (req, res) => {
+ 
   try {
     // Récupérer les dates de la requête
     const { dateDebut, dateFin } = req.query;
@@ -83,6 +87,7 @@ exports.getProduitsParPeriode = async (req, res) => {
 
     commandes.forEach((commande) => {
       commande.articles.forEach((article) => {
+        
         const produitId = article.produit._id.toString();
 
         if (!produitsMap[produitId]) {
@@ -102,8 +107,9 @@ exports.getProduitsParPeriode = async (req, res) => {
 
     // Convertir l'objet en tableau
     const resultats = Object.values(produitsMap);
-
+   
     // Retourner les résultats
+
     res.status(200).json(resultats);
   } catch (error) {
     console.error(error);
