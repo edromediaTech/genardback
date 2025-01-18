@@ -21,8 +21,6 @@ module.exports = (io) => {
   router.patch('/code/:id', auth, userCtrl.updateUserCode);
   router.put('/userlevel', auth, userCtrl.updateUserLevel);
 
-  
-
   router.delete('/logout', userCtrl.logout);
   router.delete('/:id', auth, userCtrl.deleteUser);
 

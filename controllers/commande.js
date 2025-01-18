@@ -59,7 +59,6 @@ exports.getCommandes = async (req, res) => {
 
 
 exports.getProduitsParPeriode = async (req, res) => {
- 
   try {
     // Récupérer les dates de la requête
     const { dateDebut, dateFin } = req.query;
@@ -68,14 +67,9 @@ exports.getProduitsParPeriode = async (req, res) => {
       return res.status(400).json({ error: 'Les dates dateDebut et dateFin sont requises.' });
     }
 
-    // Convertir les dates en objets Date
-    const debut = new Date(dateDebut);
-    let fin = new Date(dateFin);
-
-    // Si les deux dates sont identiques, ajuster la fin pour inclure toute la journée
-    if (dateDebut === dateFin) {
-      fin.setHours(23, 59, 59, 999);
-    }
+    // Créer les dates en tenant compte du fuseau horaire d'Haïti (UTC-5)
+    const debut = new Date(`${dateDebut}T00:00:00-05:00`);
+    let fin = new Date(`${dateFin}T23:59:59-05:00`);
 
     // Vérifier les commandes dans la plage de dates
     const commandes = await Commande.find({
@@ -87,7 +81,6 @@ exports.getProduitsParPeriode = async (req, res) => {
 
     commandes.forEach((commande) => {
       commande.articles.forEach((article) => {
-        
         const produitId = article.produit._id.toString();
 
         if (!produitsMap[produitId]) {
@@ -107,9 +100,8 @@ exports.getProduitsParPeriode = async (req, res) => {
 
     // Convertir l'objet en tableau
     const resultats = Object.values(produitsMap);
-   
-    // Retourner les résultats
 
+    // Retourner les résultats
     res.status(200).json(resultats);
   } catch (error) {
     console.error(error);
