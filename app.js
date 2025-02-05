@@ -1,4 +1,5 @@
 const express = require('express');
+
 const cors = require('cors');
 //const { io } = require('./server'); // Importer l'instance de io
 
@@ -55,6 +56,10 @@ const clientRoutes = require('./routes/client');
 const serveurRoutes = require('./routes/serveur');
 const produitRoutes = require('./routes/produit');
 const achatRoutes = require('./routes/achat');
+const roomRoutes = require('./routes/room');
+const clientUserRoutes = require('./routes/clientUser');
+const bookingRoutes = require('./routes/booking');
+
 
 
 
@@ -88,6 +93,10 @@ app.use('/api/clients', clientRoutes);
 app.use('/api/serveurs', serveurRoutes);
 app.use('/api/produits', produitRoutes);
 app.use('/api/achats', achatRoutes);
+app.use('/api/rooms', roomRoutes);
+app.use('/api/clientUsers', clientUserRoutes);
+app.use('/api/bookings', bookingRoutes);
+
 
 
 
