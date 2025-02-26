@@ -59,6 +59,8 @@ const achatRoutes = require('./routes/achat');
 const roomRoutes = require('./routes/room');
 const clientUserRoutes = require('./routes/clientUser');
 const bookingRoutes = require('./routes/booking');
+const financeRoutes = require('./routes/finance');
+const financeToolRoutes = require('./routes/financeTool');
 
 
 
@@ -96,7 +98,8 @@ app.use('/api/achats', achatRoutes);
 app.use('/api/rooms', roomRoutes);
 app.use('/api/clientUsers', clientUserRoutes);
 app.use('/api/bookings', bookingRoutes);
-
+app.use('/api/finance', financeRoutes);
+app.use('/api/financeTool', financeToolRoutes);
 
 
 
