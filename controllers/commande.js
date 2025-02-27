@@ -160,6 +160,7 @@ exports.getStatistiquesReglements = async (req, res) => {
 
 // Obtenir les produits vendus par période
 exports.getProduitsParPeriode = async (req, res) => {
+  
   try {
     // Récupérer les dates de la requête
     const { dateDebut, dateFin } = req.query;

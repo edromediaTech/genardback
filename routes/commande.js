@@ -6,6 +6,9 @@ const commandeController = require('../controllers/commande');
 // Ajouter une commande
 router.post('/', auth, commandeController.createCommande);
 
+// Obtenir les produits vendus sur une période
+router.get('/produits', commandeController.getProduitsParPeriode);
+
 // Obtenir toutes les commandes
 router.get('/', commandeController.getCommandes);
 
@@ -24,8 +27,7 @@ router.post('/add', auth, commandeController.addToCommande);
 // Ajouter un paiement à une commande
 router.post('/paiement', auth, commandeController.ajouterPaiement);
 
-// Obtenir les produits vendus sur une période
-router.get('/produits-par-periode', commandeController.getProduitsParPeriode);
+
 
 // Obtenir les statistiques des règlements sur une période
 router.get('/statistiques-reglements', commandeController.getStatistiquesReglements);
