@@ -62,7 +62,7 @@ exports.updateAchat = async (req, res) => {
     const { id } = req.params;
     const { quantite, prix, versement, reglement, livraison } = req.body;
 
-    // Trouver l'achat existant
+    // Vérifier si l'achat existe
     const achat = await Achat.findById(id);
     if (!achat) {
       return res.status(404).json({ message: 'Achat introuvable' });
@@ -72,14 +72,15 @@ exports.updateAchat = async (req, res) => {
     const updatedAchat = await Achat.findByIdAndUpdate(
       id,
       { quantite, prix, versement, reglement, livraison },
-      { new: true } // Retourner l'achat mis à jour
+      { new: true, runValidators: true }
     );
 
     res.status(200).json(updatedAchat);
   } catch (error) {
-    res.status(500).json({ message: 'Erreur lors de la mise à jour de l\'achat', error: error.message });
+    res.status(500).json({ message: "Erreur lors de la mise à jour de l'achat", error: error.message });
   }
 };
+
 
 // Supprimer un achat
 exports.deleteAchat = async (req, res) => {

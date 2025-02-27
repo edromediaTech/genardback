@@ -19,6 +19,7 @@ const bankAccountSchema = new mongoose.Schema({
     type: String,
     default: "Gourde"
   },
+ 
   bank: {
     type: String,
     
@@ -35,6 +36,12 @@ const bankAccountSchema = new mongoose.Schema({
     },
     auteur: {
       type: String     
+    },
+    source: {
+      type: String,
+      enum: ['Cash', 'Cheque','Virement'],
+      default: "Cash",
+      required: true
     },
     type: {
       type: String,

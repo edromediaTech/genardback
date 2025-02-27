@@ -34,25 +34,48 @@ AchatSchema.post('findOneAndDelete', async function (doc) {
   }
 });
 
-// Middleware pour mettre à jour la quantité du produit après la modification d'un achat
-AchatSchema.post('findOneAndUpdate', async function (doc) {
-  const Produit = mongoose.model('Produit');
-  const achat = await this.model.findOne(this.getQuery());
 
-  if (achat) {
-    const produit = await Produit.findById(achat.produitId);
-
-    if (produit) {
-      // Récupérer l'ancienne quantité et la nouvelle quantité
-      const ancienneQuantite = achat.quantite;
-      const nouvelleQuantite = this.getUpdate().$set.quantite || achat.quantite;
-
-      // Mettre à jour la quantité du produit
-      produit.quantite += nouvelleQuantite - ancienneQuantite;
-      await produit.save();
+AchatSchema.pre('findOneAndUpdate', async function (next) {
+  try {
+    const achat = await this.model.findOne(this.getQuery());
+    if (achat) {
+      this.options.ancienneQuantite = achat.quantite; // Stocke l'ancienne quantité dans les options
     }
+  } catch (error) {
+    console.error("❌ Erreur lors de la récupération de l'ancienne quantité :", error);
+  }
+  next();
+});
+
+AchatSchema.post('findOneAndUpdate', async function (doc) {
+  if (!doc) return; // Vérifier si l'achat existe
+
+  const Produit = mongoose.model('Produit');
+
+  try {
+    // Trouver l'achat mis à jour
+    const achat = await this.model.findOne(this.getQuery());
+    if (!achat) return;
+
+    // Récupérer le produit associé
+    const produit = await Produit.findById(achat.produitId);
+    if (!produit) return;
+
+    // Récupérer l'ancienne et la nouvelle quantité
+    const ancienneQuantite = this.options.ancienneQuantite || 0; // Récupère l'ancienne quantité des options
+    const nouvelleQuantite = this.getUpdate().$set?.quantite || achat.quantite;
+
+  
+    if (nouvelleQuantite !== ancienneQuantite) {
+      produit.quantite += (nouvelleQuantite - ancienneQuantite);
+      await produit.save();
+      
+    }
+  } catch (error) {
+    console.error("❌ Erreur lors de la mise à jour du stock du produit :", error);
   }
 });
+
 
 const Achat = mongoose.model('Achat', AchatSchema);
 module.exports = Achat;
