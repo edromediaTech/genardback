@@ -21,12 +21,12 @@ const expenseSchema = new mongoose.Schema({
   paymentMethod: {
     type: String,
     enum: ['cash', 'bank', 'credit'],
+    default:"cash",
     required: true
   },
   supplier: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Supplier',
-    required: false
+    type: String,
+   
   }
 }, { timestamps: true });
 

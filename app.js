@@ -61,6 +61,7 @@ const clientUserRoutes = require('./routes/clientUser');
 const bookingRoutes = require('./routes/booking');
 const financeRoutes = require('./routes/finance');
 const financeToolRoutes = require('./routes/financeTool');
+const serviceRoutes = require('./routes/service');
 
 
 
@@ -100,7 +101,7 @@ app.use('/api/clientUsers', clientUserRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/finance', financeRoutes);
 app.use('/api/financeTool', financeToolRoutes);
-
+app.use('/api/service', serviceRoutes);
 
 
 app.get('/',(req,res,next)=>{

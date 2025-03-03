@@ -3,7 +3,7 @@ const Produit = require('./produit'); // Assurez-vous que le modèle Produit est
 
 // Schéma pour la commande
 const CommandeSchema = new mongoose.Schema({
-  client: { type: String, required: true },
+  client: { type: String, default: "Client" ,required: true },
   date: { type: Date, default: Date.now },
   articles: [{
     produit: { type: mongoose.Schema.Types.ObjectId, ref: 'Produit', required: true },

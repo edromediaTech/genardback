@@ -8,7 +8,7 @@ const budgetLineSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: false
+   
   },
   category: {
     type: String,
