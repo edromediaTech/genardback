@@ -1,4 +1,4 @@
-const Achat = require('../models/Achat');
+const Achat = require('../models/achat');
 
 // ➜ Créer un nouvel achat
 exports.createAchat = async (req, res) => {
