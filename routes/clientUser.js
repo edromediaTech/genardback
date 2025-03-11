@@ -11,6 +11,9 @@ router.get('/', clientUserController.getAllUsers);
 // 3. Récupérer un utilisateur par ID
 router.get('/:id', clientUserController.getUserById);
 
+// Route pour mettre à jour le discount d'un utilisateur
+router.put('/:userId/discount', clientUserController.updateDiscount);
+
 // 4. Mettre à jour un utilisateur
 router.put('/:id', clientUserController.updateUser);
 

@@ -26,7 +26,7 @@ const path = require('path');
 
 
 app.use(cors({
-  origin: ['http://localhost:3000','https://benediction.onrender.com'],
+  origin: ['http://localhost:3000','https://genard.onrender.com'],
   methods: '*',
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -62,6 +62,7 @@ const bookingRoutes = require('./routes/booking');
 const financeRoutes = require('./routes/finance');
 const financeToolRoutes = require('./routes/financeTool');
 const serviceRoutes = require('./routes/service');
+const supplierRoutes = require('./routes/supplier');
 
 
 
@@ -102,6 +103,7 @@ app.use('/api/bookings', bookingRoutes);
 app.use('/api/finance', financeRoutes);
 app.use('/api/financeTool', financeToolRoutes);
 app.use('/api/service', serviceRoutes);
+app.use('/api/supplier', supplierRoutes);
 
 
 app.get('/',(req,res,next)=>{

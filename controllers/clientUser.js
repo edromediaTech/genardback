@@ -31,6 +31,32 @@ exports.createUser = async (req, res) => {
     }
 };
 
+
+exports.updateDiscount = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const { discount } = req.body;
+
+        // Vérification des entrées
+        if (discount === undefined || discount < 0 || discount > 100) {
+            return res.status(400).json({ message: "Le discount doit être compris entre 0 et 100." });
+        }
+
+        // Trouver l'utilisateur
+        const user = await ClientUser.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "Utilisateur non trouvé." });
+        }
+
+        // Mettre à jour le discount
+        await user.updateDiscount(discount);
+
+        res.status(200).json({ message: "Discount mis à jour avec succès.", user });
+    } catch (error) {
+        res.status(500).json({ message: "Erreur serveur.", error: error.message });
+    }
+};
+
 // 2. Récupérer tous les utilisateurs
 exports.getAllUsers = async (req, res) => {
     try {

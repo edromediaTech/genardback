@@ -45,10 +45,34 @@ exports.createBooking = async (req, res) => {
         await existingRoom.save();
 
         res.status(201).json({ message: 'Réservation créée avec succès', booking: newBooking });
-    } catch (error) {
+    } catch (error) { console.log(error)
         res.status(500).json({ message: 'Erreur lors de la création de la réservation', error: error.message });
     }
 };
+
+// ✅ Effectuer un dépôt pour une réservation
+exports.makeDeposit = async (req, res) => {
+    try {
+        const { bookingId } = req.params; // Récupération de l'ID de la réservation depuis l'URL
+        const { depositAmount } = req.body; // Récupération du montant du dépôt depuis le corps de la requête
+
+        if (!depositAmount || depositAmount <= 0) {
+            return res.status(400).json({ message: "Le montant du dépôt doit être supérieur à zéro." });
+        }
+
+        // Utilisation de la méthode statique makeDeposit du modèle Booking
+        const updatedBooking = await Booking.makeDeposit(bookingId, depositAmount);
+
+        return res.status(200).json({
+            message: "Dépôt effectué avec succès.",
+            booking: updatedBooking
+        });
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
 
 // 2. Récupérer toutes les réservations
 exports.getAllBookings = async (req, res) => {

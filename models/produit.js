@@ -9,6 +9,7 @@ const ProduitSchema = new mongoose.Schema({
   defectue: { type: Number, default: 0 },
   critique: { type: Number, default: 1 },
   alerte: { type: Number, default: 1 },
+  suppliers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Supplier' }] // Liste des fournisseurs
 
 }, { timestamps: true });
 

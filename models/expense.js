@@ -13,6 +13,12 @@ const expenseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  devise: {
+    type: String,
+    enum: ['gourde', 'dollar', 'peso'],
+    default:"gourde",
+    required: true
+  },
   budgetLine: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'BudgetLine',
@@ -24,10 +30,8 @@ const expenseSchema = new mongoose.Schema({
     default:"cash",
     required: true
   },
-  supplier: {
-    type: String,
-   
-  }
+  achat: { type: mongoose.Schema.Types.ObjectId, ref: "Achat" }, // Optionnel si paiement lié à un achat spécifique
+  supplier: { type: mongoose.Schema.Types.ObjectId, ref: "Supplier", required: true },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Expense', expenseSchema);

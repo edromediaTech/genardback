@@ -6,6 +6,8 @@ const router = express.Router();
 // 1. Créer une réservation
 router.post('/', bookingController.createBooking);
 
+router.post('/deposit/:bookingId', bookingController.makeDeposit);
+
 // 2. Récupérer toutes les réservations
 router.get('/', bookingController.getAllBookings);
 
