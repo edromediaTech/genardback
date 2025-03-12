@@ -26,7 +26,7 @@ const path = require('path');
 
 
 app.use(cors({
-  origin: ['http://localhost:3000','https://genard.onrender.com/'],
+  origin: ['http://localhost:3000','https://genard.onrender.com'],
   methods: '*',
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
